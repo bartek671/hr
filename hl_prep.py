@@ -187,7 +187,13 @@ def _(mo):
                     liquidation.method as liquidation_method
             )
         from
-            hr;
+            hr
+        -- HL files are split by ingest time, not block time. We pull DATE/* and
+        -- DATE+1/0 (as next_0), then clip back to DATE by block time. Lower
+        -- bound also drops DATE-1 late fills sitting in DATE/0. TODO: date var
+        where
+            timestamp >= '2026-03-22 00:00:00+00'
+            and timestamp < '2026-03-23 00:00:00+00';
 
 
         select * from hr_fills_from_hl

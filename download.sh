@@ -35,6 +35,18 @@ mkdir -p "${DATA_DIR}/hl_raw/fills"
 echo "SYNCING HL raw fills..."
 aws s3 sync "s3://hl-mainnet-node-data/node_fills_by_block/hourly/${HL_DATE}/" "${DATA_DIR}/hl_raw/fills/" --request-payer requester
 
+# HL splits files by ingest time, not block time, so late fills from DATE
+# end up in hour 0 of DATE+1. Pull just that one extra hour.
+NEXT_HL_DATE=$(date -j -v+1d -f "%Y-%m-%d" "$DATE" "+%Y%m%d")
+NEXT_HOUR0_SRC="s3://hl-mainnet-node-data/node_fills_by_block/hourly/${NEXT_HL_DATE}/0.lz4"
+NEXT_HOUR0_DEST="${DATA_DIR}/hl_raw/fills/next_0.lz4"
+if [[ -f "$NEXT_HOUR0_DEST" ]]; then
+    echo "SKIP $NEXT_HOUR0_DEST (exists)"
+else
+    echo "DOWNLOADING $NEXT_HOUR0_SRC ..."
+    aws s3 cp "$NEXT_HOUR0_SRC" "$NEXT_HOUR0_DEST" --request-payer requester
+fi
+
 mkdir -p "${DATA_DIR}/hl_raw/fills_json"
 echo "DECOMPRESSING HL fills..."
 for f in "${DATA_DIR}/hl_raw/fills/"*.lz4; do
