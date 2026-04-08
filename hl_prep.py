@@ -83,7 +83,6 @@ def _(hr_schema, pl):
             return f"{k} as {k}"
         return f"{k}::{cast} as {k}"
 
-
     # k needs a fix later
     hr_select = ",\n".join(make_select(k, v) for k, v in hr_schema.items())
     return (hr_select,)
@@ -99,6 +98,7 @@ def _(hr_select):
 def _(mo):
     _df = mo.sql(
         f"""
+        SET TimeZone = 'UTC';
 
         create view hr_fills_from_hl as 
         with
@@ -116,7 +116,7 @@ def _(mo):
             flat_flat as (
                 SELECT
                     * EXCLUDE (e),
-                    e[1]::VARCHAR as u,
+                    trim(e[1], '"') as u,
                     -- https://duckdb.org/docs/lts/data/json/json_functions#transforming-json-to-nested-types
                     unnest(
                         json_transform(
@@ -165,7 +165,7 @@ def _(mo):
                     px::Decimal(20, 10) as price,
                     sz::Decimal(20, 10) as size,
                     side as side,
-                    NULL as timestamp,
+                    (to_timestamp(time::INT64 / 1000.0))::TIMESTAMPTZ as timestamp,
                     dir as direction,
                     closedPnl::Decimal(20, 10) as realized_pnl,
                     hash as tx_hash,
