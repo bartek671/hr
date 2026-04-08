@@ -5,6 +5,11 @@ setup = """
 INSTALL httpfs;
 LOAD httpfs;
 SET s3_region = 'ap-northeast-1';
+SET s3_requester_pays = true;
+CREATE OR REPLACE SECRET secret (
+    TYPE s3,
+    PROVIDER credential_chain
+);
 """
 
 # BTC fills for a day
@@ -12,7 +17,8 @@ fills = """
 SELECT timestamp, side, price, size, direction, address
 FROM read_parquet('s3://hydromancer-reservoir/by_dex/hyperliquid/fills/perp/all/date=2026-03-22/fills.parquet')
 WHERE coin = 'BTC'
-ORDER BY timestamp;
+ORDER BY timestamp
+LIMIT 10;
 """
 
 # BTC 1-minute candles (aggregated from 1s)
