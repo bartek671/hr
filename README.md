@@ -6,6 +6,7 @@
 
 - [uv](https://docs.astral.sh/uv/)
 - [AWS CLI](https://aws.amazon.com/cli/) (configured for requester-pays S3)
+- [lz4](https://github.com/lz4/lz4)
 
 ## TODO
 

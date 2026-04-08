@@ -35,4 +35,15 @@ mkdir -p "${DATA_DIR}/hl_raw/fills"
 echo "SYNCING HL raw fills..."
 aws s3 sync "s3://hl-mainnet-node-data/node_fills_by_block/hourly/${HL_DATE}/" "${DATA_DIR}/hl_raw/fills/" --request-payer requester
 
+mkdir -p "${DATA_DIR}/hl_raw/fills_json"
+echo "DECOMPRESSING HL fills..."
+for f in "${DATA_DIR}/hl_raw/fills/"*.lz4; do
+    out="${DATA_DIR}/hl_raw/fills_json/$(basename "${f%.lz4}")"
+    if [[ -f "$out" ]]; then
+        echo "SKIP $out (exists)"
+    else
+        unlz4 "$f" "$out"
+    fi
+done
+
 echo "DONE"
