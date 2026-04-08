@@ -83,7 +83,6 @@ def _(hr_schema, pl):
             return f"{k} as {k}"
         return f"{k}::{cast} as {k}"
 
-
     # k needs a fix later
     hr_select = ",\n".join(make_select(k, v) for k, v in hr_schema.items())
     return (hr_select,)
@@ -180,7 +179,7 @@ def _(mo):
                     builder as builder,
                     builderFee::Decimal(20, 10) as builder_fee,
                     twapId::UINT64 as twap_id,
-                    liquidation is not NULL as is_liquidation,
+                    liquidation.liquidateduser = u as is_liquidation,
                     liquidation.markPx::Decimal(20, 10) as liquidation_mark_px,
                     liquidation.method as liquidation_method
             )
@@ -277,7 +276,7 @@ def _(flat, flat_flat, hr, mo, raw):
                     builder as builder,
                     builderFee::Decimal(20, 10) as builder_fee,
                     twapId::UINT64 as twap_id,
-                    liquidation is not NULL as is_liquidation,
+                    liquidation.liquidateduser = u as is_liquidation,
                     liquidation.markPx::Decimal(20, 10) as liquidation_mark_px,
                     liquidation.method as liquidation_method
             )
