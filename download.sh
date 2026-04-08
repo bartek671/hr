@@ -28,4 +28,11 @@ done
 # Sync snapshots (multiple parquet files)
 echo "SYNCING snapshots..."
 aws s3 sync "${BUCKET}/${SNAPSHOT_PREFIX}" "${DATA_DIR}/snapshots/" --request-payer requester
+
+# Sync raw Hyperliquid fills
+HL_DATE="${DATE//-/}"
+mkdir -p "${DATA_DIR}/hl_raw/fills"
+echo "SYNCING HL raw fills..."
+aws s3 sync "s3://hl-mainnet-node-data/node_fills_by_block/hourly/${HL_DATE}/" "${DATA_DIR}/hl_raw/fills/" --request-payer requester
+
 echo "DONE"

@@ -10,7 +10,7 @@
 ## TODO
 
 - [x] Get [Hydromancer Reservoir](https://docs.hydromancer.xyz/reservoir) data
-- [ ] Fetch raw data from Hyperliquid's S3
+- [x] Fetch raw data from Hyperliquid's S3
 - [ ] Make fills parquet from HL
 - [ ] Make candles from HL
 - [ ] Compare
