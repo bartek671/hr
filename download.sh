@@ -6,8 +6,8 @@ DATE="2026-03-22"
 DATA_DIR="data/${DATE}"
 
 declare -A FILES=(
-    ["fills/fills.parquet"]="by_dex/hyperliquid/fills/perp/all/date=${DATE}/fills.parquet"
-    ["candles/candles.parquet"]="by_dex/hyperliquid/candles/1s/date=${DATE}/candles.parquet"
+    ["fills/fills.parquet"]="global/fills/raw/date=${DATE}/fills.parquet"
+    ["candles/candles.parquet"]="global/candles/1s/date=${DATE}/candles.parquet"
 )
 
 SNAPSHOT_PREFIX="by_dex/hyperliquid/snapshots/perp/date=${DATE}/"
